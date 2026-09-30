@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adler-fractal"
+version = "1.0.0"
+license = "MIT"
+description = "Recursive radial traces and regular polygon endpoint IFS"
+requires-python = ">=3.10"
+authors = [{name = "Marcus Adler"}]
+dependencies = []
+
+[project.optional-dependencies]
+render = ["matplotlib>=3.8", "numpy>=1.24"]
+
+[tool.setuptools.packages.find]
+include = ["adler_fractal*"]

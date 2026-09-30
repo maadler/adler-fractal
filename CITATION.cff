@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Please cite the accompanying Zenodo technical report and reference implementation. DOI was reserved before deposition and is registered upon public publication."
+type: software
+title: "Adler Fractal: Recursive Radial Construction and Reference Implementation"
+version: 1.0.0
+license: MIT
+doi: 10.5281/zenodo.23057945
+repository-code: "https://github.com/maadler/adler-fractal"
+authors:
+  - family-names: Adler
+    given-names: Marcus
+abstract: "Reference implementation accompanying a technical report on radial traces and established polygon-IFS limits. The proposed name documents Marcus Adler's supplied drawing; mathematical novelty and historical priority are not claimed."
+keywords:
+  - recursive geometry
+  - radial construction
+  - polygon IFS
+  - inhomogeneous self-similar set

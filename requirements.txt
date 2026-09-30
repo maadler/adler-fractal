@@ -1,0 +1,3 @@
+# Tested figure-rendering environment. The geometry and SVG exporter use only stdlib.
+matplotlib==3.10.8
+numpy==2.3.5

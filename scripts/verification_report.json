@@ -1,0 +1,41 @@
+{
+  "prepared_on": "2026-09-30",
+  "status": "verified_version_prepared_for_public_deposition",
+  "software_version": "1.0.0",
+  "python": "3.12.14",
+  "matplotlib": "3.10.8",
+  "numpy": "2.3.5",
+  "geometry_test_result": "passed",
+  "geometry_tests": 12,
+  "geometry_test_command": "python3 -m unittest discover -s tests -v",
+  "original_comparison": {
+    "segments_in_order": 5256,
+    "coordinate_tolerance": 1e-10,
+    "result": "passed"
+  },
+  "original_sha256": "235b6e65737b24535ded79af19b89842ed5864e2b3e8ac2b24b80c17d10bd85d",
+  "original_bytes_preserved": true,
+  "svg_path_count": 5256,
+  "depth4_commands_m72": 27252360,
+  "depth4_commands_m18": 111150,
+  "unique_depth2_endpoints_m72": 2593,
+  "pdf_pages": 9,
+  "unresolved_pdf_citations": false,
+  "pdf_out_of_page_characters": 0,
+  "pdf_visual_review": "Original nine pages reviewed; after adding DOI and chosen licenses, revised title and final pages rendered and inspected. Nine pages, resolved references, no out-of-page characters.",
+  "figure_sampling_seed": 20260930,
+  "variant_samples_per_panel": 120000,
+  "notes": [
+    "Numerical tests support implementation; infinite-set conclusions use analytical proofs.",
+    "App screenshot does not establish the app scaling rule.",
+    "The author authorized public deposition and selected MIT for code and CC BY 4.0 for original text and figures. DOI was reserved before file preparation. Public deposition is a separate external step."
+  ],
+  "doi": "10.5281/zenodo.23057945",
+  "doi_status": "reserved_before_deposition",
+  "zenodo_draft_url": "https://zenodo.org/uploads/23057945",
+  "license_selection": {
+    "software": "MIT",
+    "original_text_and_figures": "CC-BY-4.0"
+  },
+  "repository_url": "https://github.com/maadler/adler-fractal"
+}

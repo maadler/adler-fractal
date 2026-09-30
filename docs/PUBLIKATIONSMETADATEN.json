@@ -1,0 +1,37 @@
+{
+  "status": "version_prepared_for_public_deposition",
+  "prepared_on": "2026-09-30",
+  "title": "The Adler Fractal: A Recursive Radial Drawing and Its Polygon-IFS Limits",
+  "creators": [
+    {
+      "given_name": "Marcus",
+      "family_name": "Adler"
+    }
+  ],
+  "version": "1.0.0",
+  "suggested_resource_type": "Publication / Report with supporting software",
+  "manuscript_language": "eng",
+  "supporting_documentation_language": "deu",
+  "description": "This technical report documents the radial recursive drawing supplied by Marcus Adler under the proposed name Adler Fractal. It defines finite traces and endpoint sets, proves finite command counts and density of the equal-length original's endpoints in the plane, and relates contractive variants to established regular polygon iterated function systems and inhomogeneous self-similar sets. A headless Python reference implementation, reproducible figures, an unchanged copy of the original source, and verification tests accompany the report. No claim of a mathematically new fractal family or historical priority is made. The mathematical formalization, draft text, and reference implementation were prepared with assistance from OpenAI ChatGPT.",
+  "keywords": [
+    "Adler Fractal",
+    "recursive geometry",
+    "radial construction",
+    "iterated function system",
+    "polygon IFS",
+    "inhomogeneous self-similar set",
+    "Python"
+  ],
+  "doi": "10.5281/zenodo.23057945",
+  "repository_url": "https://github.com/maadler/adler-fractal",
+  "publication_date": "2026-09-30",
+  "license": {
+    "software": "MIT",
+    "original_text_and_figures": "CC-BY-4.0"
+  },
+  "license_status": "selected_by_author",
+  "notes": "Human-readable metadata worksheet, not an executable Zenodo API request. Marcus Adler authorized public deposition and selected the listed licenses. The DOI was actually reserved before preparation of these files and is registered when the record is published. No independent peer review was performed.",
+  "doi_status": "reserved_before_deposition",
+  "zenodo_draft_url": "https://zenodo.org/uploads/23057945",
+  "zenodo_draft_saved": true
+}
