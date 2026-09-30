@@ -10,25 +10,25 @@ class SpeedEnum(Enum):
 
 def draw_fractal(
         _turtle: turtle.Turtle,
-        start_pos: tuple[int, int],
+        start_pos: tuple[float, float],
         ang: int = 20,
         lng: int = 200,
         iterations: int = 2
 ) -> None:
     if iterations <= 0:
         return
-    circle_positions: list[tuple] = []
-    turt.penup()
-    turt.goto(*start_pos)
-    turt.pendown()
+    circle_positions: list[tuple[float, float]] = []
+    _turtle.penup()
+    _turtle.goto(*start_pos)
+    _turtle.pendown()
 
     for angle in range(0, 360, ang):
-        turt.setheading(angle)
-        turt.forward(lng)
-        circle_positions.append(tuple(turt.pos()))
-        turt.penup()
-        turt.goto(*start_pos)
-        turt.pendown()
+        _turtle.setheading(angle)
+        _turtle.forward(lng)
+        circle_positions.append(tuple(_turtle.pos()))
+        _turtle.penup()
+        _turtle.goto(*start_pos)
+        _turtle.pendown()
 
     for circle_position in circle_positions:
         draw_fractal(
@@ -38,6 +38,7 @@ def draw_fractal(
             lng=lng,
             iterations=iterations - 1
         )
+
 
 if __name__ == '__main__':
     speed: SpeedEnum = SpeedEnum.X_HIGH

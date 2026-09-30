@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class RecordingTurtle:
-    """Minimal independent recorder for the unmodified source's Turtle calls."""
+    """Minimal independent recorder for the original script's Turtle calls."""
     def __init__(self):
         self.position = 0j
         self.heading = 0.0
@@ -50,11 +50,12 @@ class RecordingTurtle:
 
 
 class GeometryTests(unittest.TestCase):
-    def test_unmodified_original_commands_and_traversal(self):
+    def test_original_commands_and_traversal(self):
         tree = ast.parse((ROOT / "original/eagle_fractal.py").read_text())
         fn = next(x for x in tree.body if isinstance(x, ast.FunctionDef) and x.name == "draw_fractal")
         recorder = RecordingTurtle()
-        ns = {"turtle": SimpleNamespace(Turtle=RecordingTurtle), "turt": recorder}
+        # No global Turtle is provided: the function has to draw with the one it is given.
+        ns = {"turtle": SimpleNamespace(Turtle=RecordingTurtle)}
         exec(compile(ast.Module(body=[fn], type_ignores=[]), "original/eagle_fractal.py", "exec"), ns)
         ns["draw_fractal"](recorder, (0, 0), ang=5, lng=200, iterations=2)
         reference = list(iter_segments(Parameters()))
