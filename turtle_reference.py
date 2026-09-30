@@ -1,4 +1,7 @@
-"""GUI adapter fixing the original global-Turtle dependency.
+"""Turtle front end for the reference implementation.
+
+Draws the segments produced by adler_fractal with a real Turtle, in the same
+order as the original script, and also accepts a scale factor.
 
 Run with python3 turtle_reference.py on a system with Tk/Turtle installed.
 The mathematical core and SVG export require neither Turtle nor Tk.

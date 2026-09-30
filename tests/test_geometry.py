@@ -155,9 +155,20 @@ class GeometryTests(unittest.TestCase):
         self.assertAlmostEqual(Parameters(spokes=8, scale=.25).certified_endpoint_dimension, 1.5)
         self.assertAlmostEqual(Parameters(spokes=3, scale=.5).certified_endpoint_dimension, math.log(3)/math.log(2))
         self.assertEqual(Parameters(spokes=4, scale=.5).certified_endpoint_dimension, 2)
-        self.assertIsNone(Parameters(spokes=72, scale=.5).certified_endpoint_dimension)
+        self.assertEqual(Parameters(spokes=72, scale=.5).certified_endpoint_dimension, 2)
+        self.assertIsNone(Parameters(spokes=5, scale=.5).certified_endpoint_dimension)
+        self.assertIsNone(Parameters(spokes=72, scale=.4).certified_endpoint_dimension)
         self.assertIsNone(Parameters().similarity_dimension)
         self.assertEqual(statistics(Parameters())["drawing_commands"], 5256)
+        # Even m at scale 1/2: the endpoints fill the regular polygon, so each of
+        # its points lies within the Hausdorff bound of the depth-n endpoints.
+        p = Parameters(spokes=6, iterations=5, length=1, scale=.5)
+        ends = list(iter_endpoints(p))
+        bound = p.length * p.scale ** p.iterations / (1 - p.scale)
+        corners = [p.limiting_radius * u for u in p.directions]
+        for z in (0j, corners[0] / 3, (corners[0] + corners[1]) / 2,
+                  (corners[0] + corners[1] + corners[3]) / 3):
+            self.assertLessEqual(min(abs(z - e) for e in ends), bound + 1e-12)
 
 
 if __name__ == "__main__":

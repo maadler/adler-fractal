@@ -1,12 +1,13 @@
 import argparse
 import json
 from pathlib import Path
+from ._version import __version__
 from .core import Parameters, statistics
 from .render import write_png, write_svg
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Adler radial construction v1.0.0 (headless)")
+    ap = argparse.ArgumentParser(description=f"Adler radial construction v{__version__} (headless)")
     group = ap.add_mutually_exclusive_group()
     group.add_argument("--spokes", type=int)
     group.add_argument("--angle", type=int, help="positive integer divisor of 360; e.g. 5")

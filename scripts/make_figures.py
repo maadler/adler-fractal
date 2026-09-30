@@ -24,6 +24,7 @@ def panel_file(fig, name):
 original = Parameters()
 write_svg(FIG / "adler_original.svg", original)
 write_png(FIG / "adler_original.png", original, linewidth=.24, alpha=.52)
+write_svg(FIG / "octagonal_trace.svg", Parameters(spokes=8, iterations=4, scale=.25))
 
 fig, axes = plt.subplots(1, 3, figsize=(10.8, 3.65), facecolor="#faf9f5")
 for ax, n in zip(axes, (1, 2, 3)):
@@ -49,11 +50,11 @@ variants = [
     (Parameters(spokes=8, length=1, scale=.25), "Separated octagonal IFS", "dim H = 1.5"),
     (Parameters(spokes=8, length=1, scale=.1), "Separated endpoint dust", "dim H = 0.903090"),
     (Parameters(spokes=72, length=1, scale=.03), "72-direction separated IFS", "dim H = 1.219619"),
-    (Parameters(spokes=72, length=1, scale=.5), "Overlapping 72-direction IFS", "dim H not established here"),
+    (Parameters(spokes=72, length=1, scale=.5), "Filled 72-gon, overlapping maps", "dim H = 2"),
 ]
 for ax, (p, title, dim) in zip(axes.flat, variants):
     draw_axes(ax, p, mode="chaos", samples=120_000, seed=20260930, alpha=.65)
     ax.set_title(f"{title}\nm = {p.spokes}, r = {p.scale:g}\n{dim}", fontsize=9.3, pad=9)
 fig.subplots_adjust(left=.015, right=.985, bottom=.025, top=.885, wspace=.17, hspace=.52)
 panel_file(fig, "endpoint_variants")
-print("Generated original SVG/PNG and three PNG/PDF figure pairs.")
+print("Generated two SVG files, the original PNG and three PNG/PDF figure pairs.")

@@ -10,6 +10,8 @@ import math
 import random
 from typing import Iterator
 
+from ._version import __version__
+
 
 @dataclass(frozen=True)
 class Parameters:
@@ -92,13 +94,16 @@ class Parameters:
     def certified_endpoint_dimension(self) -> float | None:
         """A dimension claim only in explicitly proved cases.
 
-        The disk criterion is sufficient, not necessary. The two special cases
-        are the Sierpinski triangle and the filled square.
+        The disk criterion is sufficient, not necessary. The special cases at
+        scale 1/2 are the Sierpinski triangle and, for every even number of
+        directions, the filled regular polygon.
         """
         if self.scale < self.separation_threshold:
             return self.similarity_dimension
-        if self.scale == 0.5 and self.spokes in (3, 4):
+        if self.scale == 0.5 and self.spokes == 3:
             return self.similarity_dimension
+        if self.scale == 0.5 and self.spokes % 2 == 0:
+            return 2.0
         return None
 
 
@@ -189,7 +194,7 @@ def statistics(p: Parameters) -> dict:
         total += term
         term *= q
     return {
-        "software_version": "1.0.0",
+        "software_version": __version__,
         "spokes": p.spokes, "iterations": p.iterations,
         "angle_degrees": 360 / p.spokes,
         "length": p.length, "scale": p.scale,
