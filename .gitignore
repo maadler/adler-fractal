@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# LaTeX build files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.xdv
+
+# Written into the release ZIP by scripts/package_release.py
+MANIFEST.sha256
+
+# Output of the command line in the project root (figures/ is tracked)
+/*.png
+/*.svg
+
+# Local tooling
+.DS_Store
+.claude/
+.complexity/
+.idea/
+.muna/
+.vscode/
