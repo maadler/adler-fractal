@@ -1,20 +1,19 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[margin=22mm,headheight=14pt]{geometry}
 \usepackage{fontspec}
-\setmainfont{Latin Modern Roman}
-\setsansfont{Latin Modern Sans}
-\setmonofont{Latin Modern Mono}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{graphicx,booktabs,array,xcolor,fancyhdr,enumitem}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[colorlinks=true,urlcolor=teal,linkcolor=teal,citecolor=teal]{hyperref}
-\hypersetup{pdftitle={The Adler Fractal: A Recursive Radial Drawing and Its Polygon-IFS Limits},pdfauthor={Marcus Adler},pdfsubject={Technical report version 1.0.0 prepared 30 September 2026}}
+\newcommand{\reportversion}{1.0.1}
+\newcommand{\reportdate}{30 September 2026}
+\hypersetup{pdftitle={The Adler Fractal: A Recursive Radial Drawing and Its Polygon-IFS Limits},pdfauthor={Marcus Adler},pdfsubject={Technical report, version \reportversion, \reportdate}}
 \definecolor{ink}{HTML}{243D55}
 \definecolor{teal}{HTML}{23858B}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\sffamily\color{ink} ADLER FRACTAL}
-\fancyhead[R]{\small\sffamily Technical report \textbar\ 30 September 2026}
+\fancyhead[R]{\small\sffamily Technical report \textbar\ \reportdate}
 \fancyfoot[C]{\small\sffamily\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
 \setlength{\parindent}{0pt}
@@ -31,7 +30,7 @@
 \begin{document}
 
 % Page 1
-{\sffamily\color{teal}\small TECHNICAL REPORT \quad SPECIFICATION AND SOFTWARE v1.0.0}
+{\sffamily\color{teal}\small TECHNICAL REPORT \quad SPECIFICATION AND SOFTWARE v\reportversion}
 \vspace{5mm}
 
 {\sffamily\color{ink}\LARGE\bfseries The Adler Fractal\par}
@@ -39,38 +38,40 @@
 {\sffamily\large A Recursive Radial Drawing and Its Polygon-IFS Limits\par}
 \vspace{4mm}
 {\large Marcus Adler\par}
-{\small Version 1.0.0, prepared 30 September 2026. Not independently peer reviewed.\par}
-{\small Zenodo DOI: \texttt{10.5281/zenodo.23057945} (reserved before deposition).\par}
+{\small Version \reportversion, \reportdate. Not peer reviewed.\par}
+{\small DOI: \href{https://doi.org/10.5281/zenodo.23057944}{\texttt{10.5281/zenodo.23057944}} (all versions).\par}
 
 \sectiontitle{Abstract}
-We document the radial recursive drawing supplied by Marcus Adler under the
-proposed name \emph{Adler Fractal}. Every node draws equally spaced spokes in
-the same absolute directions; subsequent generations begin at their endpoints.
-The original uses 72 directions, two generations and unchanged segment length.
-We separate the accumulated trace, the endpoint sets and their closures. We
-derive command counts, endpoint multiplicities and sharp radius bounds. For
-the equal-length original, the union of all endpoint generations is dense in
-the plane. Contractive variants produce established regular polygon iterated
-function systems; their trace closures are established inhomogeneous
-self-similar sets. A headless Python implementation, original-source comparison,
-proofs and reproducible figures accompany this report. No claim of a new
-mathematical fractal family or historical priority is made.
+This report documents a recursive radial drawing that I first wrote as a
+short Python Turtle script and that I call the \emph{Adler Fractal}. Every
+node draws equally spaced spokes in the same absolute directions; the next
+generation starts at their endpoints. The original uses 72 directions, two
+generations and spokes of constant length. The report separates the
+accumulated trace, the endpoint sets and their closures, and derives command
+counts, endpoint multiplicities and sharp radius bounds. For the equal-length
+original, the union of all endpoint generations is dense in the plane.
+Contractive variants produce established regular polygon iterated function
+systems; their trace closures are established inhomogeneous self-similar
+sets. A Python implementation without GUI dependencies, a comparison with
+the original script, proofs and reproducible figures accompany the report.
+I claim neither a new fractal family nor historical priority.
 
 \begin{center}
 \includegraphics[width=98mm]{adler_original.png}
 \captionof{figure}{Original geometry: $m=72$, $n=2$, $L=200$, $r=1$.
-The 5,256 drawing commands create a dense radial rosette. Color and stroke
-width are rendering choices, not part of the geometric definition.}
+The 5,256 drawing commands create a tightly packed radial rosette. Color and
+stroke width are rendering choices, not part of the geometric definition.}
 \end{center}
 
-{\small\textbf{Provenance.} The unchanged supplied file is archived as
-\texttt{original/eagle\_fractal.py}. Formalization, analysis, draft text and
-reference software were prepared with assistance from OpenAI ChatGPT.
-Independent mathematical review has not been performed.}
+{\small\textbf{Provenance.} My original script is included as
+\texttt{original/eagle\_fractal.py}; Section~1 notes one correction.
+Formalization, analysis, text and reference software were prepared with AI
+assistance (OpenAI ChatGPT; revised with Anthropic Claude). There has been
+no independent mathematical review.}
 
 \newpage
 % Page 2
-\sectiontitle{1. Definition and relation to the supplied program}
+\sectiontitle{1. Definition and relation to the original script}
 Identify the Euclidean plane with $\C$. Fix an integer $m\ge3$, a depth
 $n\ge0$, an initial length $L>0$, a scale $0<r\le1$, an orientation
 $\theta\in\R$ and an origin $z_0\in\C$. Define
@@ -96,14 +97,14 @@ For $z_0=0$, write
 \[
 B=\bigcup_{j=0}^{m-1}[0,Lu_j],\qquad f_j(x)=Lu_j+rx.
 \]
-The finite trace satisfies
+For $n\ge1$ the finite trace satisfies
 \begin{equation}
 A_n=B\cup\bigcup_{j=0}^{m-1} f_j(A_{n-1}).
 \end{equation}
 Other origins translate all sets by $z_0$. Subsequent sections use origin zero.
 
 \subsection*{Original parameters and traversal}
-The supplied main call has
+The main call of the original script uses
 \[
 (m,n,L,r,\theta,z_0)=(72,2,200,1,0,0),\quad \alpha=360^\circ/m=5^\circ.
 \]
@@ -112,16 +113,18 @@ The children are then visited recursively in the same order. Repositioning
 between segments happens with the pen raised. The reference generator
 preserves this ordering, including retraced segments.
 
-The original accepts integer steps in \texttt{range(0, 360, ang)}. If the
-step does not divide 360, the cyclic gap at the end differs from the other
-gaps. Such nonregular direction sets are outside this specification; the
-angle-import adapter rejects them explicitly. The default function argument
-in the supplied file is 20 degrees, while its actual main call uses 5 degrees.
+The original accepts any integer step in \texttt{range(0, 360, ang)}. If the
+step is below 360 and does not divide it, the cyclic gap at the end differs
+from the other gaps. Such nonregular direction sets are outside this
+specification; the angle-import adapter rejects them, as it does the steps
+180 and 360, which leave fewer than three directions. The function's default
+step is 20 degrees, while the main call uses 5 degrees.
 
-The drawing function receives \texttt{\_turtle} but accesses a global
-\texttt{turt}. The new adapter uses the provided object. The original file
-is preserved unchanged; the correction changes the dependency, not the
-intended geometry of its supplied main call.
+In the first published version of the script (v1.0.0), the drawing function
+received \texttt{\_turtle} but drew with a module-level global \texttt{turt},
+so it ran only as a script. Since v1.0.1 it draws with the turtle it is
+given. This changes the dependency, not the drawing: the same 5,256 segments
+are produced in the same order.
 
 \newpage
 % Page 3
@@ -154,7 +157,7 @@ Depth $n$ & Commands, $m=72$ & Outer radius, $L=200$, $r=1$\\
 \bottomrule
 \end{tabular}
 \end{center}
-In particular, $T_2=1,051,200$ length units for the original. This is not
+In particular, $T_2=1{,}051{,}200$ length units for the original. This is not
 the length of the trace after removing overdraw.
 
 \subsection*{Symmetry and finite dimension}
@@ -173,13 +176,14 @@ For $r=1$ and $n=2$,
 These discrete radii explain the rings in the endpoint pattern. They do not
 assert that entire circles are present in the trace.
 
-For even $m$, the second endpoint set has exactly $m^2/2+1$ distinct points.
-Indeed, a nonzero midpoint of a chord of a fixed circle uniquely determines
-its unordered endpoints. There are $m(m+1)/2$ unordered pairs allowing
-repetition; all $m/2$ antipodal pairs collapse to zero, and all other pairs
-remain distinct. Hence the count is $m(m+1)/2-m/2+1$. For $m=72$, 5,184
-endpoint addresses therefore represent only 2,593 points. The origin has
-72 ordered addresses.
+Still with $r=1$, for even $m$ the second endpoint set has exactly
+$m^2/2+1$ distinct points. Indeed, $p_{(a,b)}/2$ is the midpoint of the chord
+from $Lu_a$ to $Lu_b$ (a single point of the circle if $a=b$), and a nonzero
+midpoint determines the unordered pair $\{a,b\}$. There are $m(m+1)/2$
+unordered pairs allowing repetition; all $m/2$ antipodal pairs collapse to
+zero, and all other pairs remain distinct. Hence the count is
+$m(m+1)/2-m/2+1$. For $m=72$, 5,184 endpoint addresses therefore represent
+only 2,593 points. The origin has 72 ordered addresses.
 
 \newpage
 % Page 4
@@ -201,13 +205,13 @@ $G=\bigcup_{k\ge0}E_k$ is therefore the additive group generated by the
 vectors $Lu_j$: every integer linear combination is a finite sum using
 positive or opposite directions.
 
-In units of $L$, directions at 0, 30, 60 and 90 degrees belong to this set,
-and
+The directions $u_0$, $u_6$, $u_{12}$ and $u_{18}$ point at 0, 30, 60 and
+90 degrees. In units of $L$,
 \begin{align*}
-2u_{30^\circ}-u_{90^\circ}&=(\sqrt3,0),\\
-2u_{60^\circ}-u_{0^\circ}&=(0,\sqrt3).
+2u_6-u_{18}&=(\sqrt3,0),\\
+2u_{12}-u_0&=(0,\sqrt3).
 \end{align*}
-The unit axis vectors also occur. Thus
+The unit axis vectors $u_0$ and $u_{18}$ also occur. Thus
 \[
 L(\Z+\sqrt3\Z)\times L(\Z+\sqrt3\Z)\subset G.
 \]
@@ -247,7 +251,8 @@ For $0<r<1$, define the infinite endpoint set
 K=\left\{L\sum_{t=1}^{\infty}r^{t-1}u_{j_t}:
 j_t\in\{0,\ldots,m-1\}\right\}.
 \end{equation}
-The series converges uniformly over addresses. Its image is compact and
+The series converges uniformly over addresses, so the address map is
+continuous on the compact space of addresses. Its image $K$ is compact and
 satisfies $K=\bigcup_j f_j(K)$ for $f_j(x)=Lu_j+rx$; it is the unique
 nonempty compact attractor of these contractions, as in the standard
 IFS theory of Hutchinson \cite{hutchinson}.
@@ -266,8 +271,9 @@ Every series is $L/(1-r)$ times a convex combination of the $u_j$;
 each vertex occurs as a constant address. Truncating and extending
 addresses yields the explicit approximation bound
 \begin{equation}
-d_H(E_n,K)\le\frac{Lr^n}{1-r}.
+d_H(E_n,K)\le\frac{Lr^n}{1-r},
 \end{equation}
+where $d_H$ denotes the Hausdorff distance between nonempty compact sets.
 
 \subsection*{A sufficient separation certificate}
 Each $f_j(K)$ lies in the closed disk centered at $Lu_j$ with radius
@@ -277,26 +283,42 @@ Consequently, these disks, and hence the first-level pieces, are disjoint if
 r<q_m:=\frac{\sin(\pi/m)}{1+\sin(\pi/m)}.
 \end{equation}
 This sufficient criterion is not a necessary threshold for separation.
-Under it, an open disk of radius $L/(1-r)$ is mapped into itself with
-disjoint images, giving the open set condition. The standard similarity
-dimension theorem \cite{hutchinson} then gives
+Under it, the open disk of radius $L/(1-r)$ about the origin is mapped into
+itself with disjoint images, giving the open set condition. The standard
+similarity dimension theorem \cite{hutchinson} then gives
 \begin{equation}
 \dimH K=s:=\frac{\log m}{\log(1/r)}.
 \end{equation}
 Without a verified separation condition, only the general bound
-$\dimH K\le\min\{2,s\}$ is asserted here. In particular, $m=72$, $r=1/2$
-gives $s\approx6.169925$, which cannot be a planar Hausdorff dimension.
+$\dimH K\le\min\{2,s\}$ is asserted here. For $m=72$,
+$q_m\approx0.0417962601$; the choice $r=0.03$ therefore has the certified
+dimension $\dimH K\approx1.219619423$. No pixel-based estimate is used.
 
-For $m=72$, $q_m\approx0.0417962601$. The choice $r=0.03$ therefore
-has the certified dimension $\dimH K\approx1.219619423$. No
-pixel-based estimate is used in this conclusion.
+\subsection*{A filled case: even $m$ at scale $1/2$}
+For even $m$ and $r=1/2$, $K$ is the filled regular polygon $P$ with
+vertices $v_j=2Lu_j$. Each \mbox{$f_j(x)=(x+v_j)/2$} maps $P$ into itself,
+so it suffices that the images cover $P$. Write $x\in P$ as
+$\alpha v_j+\beta v_{j+1}$ for some $j$, with $\alpha,\beta\ge0$,
+$\alpha+\beta\le1$ and, by symmetry, $\alpha\ge\beta$. Then $x=f_j(y)$ for
+$y=(2\alpha-1)v_j+2\beta v_{j+1}$. If $\alpha\ge1/2$, $y$ lies in the
+triangle $0,v_j,v_{j+1}$. Otherwise $y=(1-2\alpha)v_{j+m/2}+2\beta v_{j+1}$,
+since $-v_j=v_{j+m/2}$; the coefficients are nonnegative with sum at most
+one, so $y$ is a convex combination of two vertices and the center. Either
+way $y\in P$, so $P=\bigcup_jf_j(P)$, and uniqueness of the attractor gives
+$K=P$ with $\dimH K=2$. For $m=72$ the maps overlap and $s\approx6.169925$
+is no dimension at all. For odd $m$ the point $-v_j$ lies outside $P$ and
+the center is not covered.
 
 \newpage
 % Page 6
-\sectiontitle{5. The accumulated trace has a different limit}
-Let $O=\bigcup_{n\ge1}A_n$ and $S=\overline O$ for $0<r<1$.
-The persistent initial star prevents identification of the accumulated
-trace with the endpoint attractor alone.
+\sectiontitle{5. The accumulated trace and its closed limit}
+Let $O=\bigcup_{n\ge1}A_n$ and $S=\overline O$ for $0<r<1$. The persistent
+initial star generally separates the closed trace from the endpoint
+attractor: $S=K$ holds if and only if $B\subset K$, because every image of
+$B$ under compositions of the $f_j$ then lies in $K$. This fails for $m=3$,
+$r=1/2$, where the center is not a point of the Sierpinski triangle, and
+whenever $K$ is totally disconnected. It holds for even $m$ at $r=1/2$,
+where $K$ is the filled polygon of Section~4.
 
 \begin{proposition}
 The closed trace is
@@ -325,11 +347,11 @@ homogeneous-plus-orbital decomposition and Hausdorff-dimension rule
 \cite{fraser}. These identities are not presented as new general theorems.
 
 \begin{center}
-\includegraphics[width=\linewidth]{trace_vs_endpoints.pdf}
-\captionof{figure}{$m=3$, $r=1/2$, $L=1$. Left: the trace through
-eight generations, including persistent spokes. Right: a finite chaos-game
-sample of the classical Sierpinski endpoint attractor. The two sets share
-the same closed-limit Hausdorff dimension, but are different sets.}
+\includegraphics[width=\linewidth,trim=0 0.7in 0 0,clip]{trace_vs_endpoints.pdf}
+\captionof{figure}{$m=3$, $r=1/2$, $L=1$, $\theta=90^\circ$. Left: the trace
+through eight generations, including persistent spokes. Right: a finite
+chaos-game sample of the classical Sierpinski endpoint attractor. The two
+sets share the same closed-limit Hausdorff dimension, but are different sets.}
 \end{center}
 
 An endpoint dust can have dimension below one, while its accumulated
@@ -344,9 +366,11 @@ attractors are compatible with these dimension statements.
 \begin{center}
 \includegraphics[width=\linewidth]{endpoint_variants.pdf}
 \captionof{figure}{Each panel contains 120,000 chaos-game samples with
-seed 20260930. These finite stochastic plots illustrate endpoint attractors,
-not accumulated traces. A round-looking cluster is not a proof that a
-circle or disk is filled. Dimensions below are justified analytically.}
+seed 20260930; the first two panels use $\theta=90^\circ$ and
+$\theta=45^\circ$. These finite stochastic plots illustrate endpoint
+attractors, not accumulated traces. Sample density is not a picture of the
+set: the attractor of the last panel is the whole filled 72-gon.
+Dimensions below are justified analytically.}
 \end{center}
 
 \begin{center}
@@ -360,7 +384,7 @@ $m$ & $r$ & $\dimH K$ & $\dimH S$ & Certificate\\
 8 & 0.25 & 1.5 & 1.5 & $r<q_8$\\
 8 & 0.1 & 0.903090 & 1 & $r<q_8$\\
 72 & 0.03 & 1.219619 & 1.219619 & $r<q_{72}$\\
-72 & 0.5 & Undetermined & Undetermined & Overlaps; no claim here\\
+72 & 0.5 & 2 & 2 & Filled 72-gon; even $m$, Section 4\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -370,12 +394,14 @@ disjoint interiors inside the original triangle. The open set condition
 therefore gives $\log 3/\log2$. For the square at scale $1/2$, the four
 corner copies tile the entire square; uniqueness of the compact
 attractor makes $K$ that square. A contractive IFS need not have a
-noninteger dimension or a perforated attractor.
+noninteger dimension or a perforated attractor. In the last panel the
+pale center and the thin rim are sampling effects: points there require
+long runs of a single direction and are rarely drawn.
 
-Values of $L$ translate coordinate units through a uniform scaling;
-$\theta$ rotates the figure. Neither changes these dimensions. No
-dimension is inferred from opacity, image resolution, repeated overdraw
-or apparent empty regions in the point samples.
+Changing $L$ rescales every set uniformly; changing $\theta$ rotates it.
+Neither changes these dimensions. No dimension is inferred from opacity,
+image resolution, repeated overdraw or apparent empty regions in the point
+samples.
 
 \newpage
 % Page 8
@@ -383,34 +409,37 @@ or apparent empty regions in the point samples.
 The package \texttt{adler\_fractal/} implements the definitions with
 Python floating-point coordinates. Geometry and SVG export use only the
 standard library. PNG output and the report figures use Matplotlib;
-the supplied environment pins Matplotlib 3.10.8 and NumPy 2.3.5.
+\texttt{requirements.txt} pins Matplotlib 3.10.8 and NumPy 2.3.5.
 Geometry and SVG need Python 3.10 or later; the pinned figure environment
 needs Python 3.11 or later.
 
 \subsection*{Three output meanings}
-\begin{description}[leftmargin=18mm,labelwidth=16mm,labelsep=2mm,font=\normalfont\ttfamily]
+\begin{description}[leftmargin=24mm,labelwidth=22mm,labelsep=2mm,font=\normalfont\ttfamily]
 \item[\texttt{trace}] Enumerates every segment command through depth $n$,
 preserving traversal order and multiplicity.
 \item[\texttt{endpoints}] Enumerates depth-$n$ endpoint addresses, with
 multiplicity; this is not a deduplicated point set.
 \item[\texttt{chaos}] Samples $x_{t+1}=rx_t+Lu_{J_t}$ with uniform independent
-direction choices and a recorded seed. It requires $0<r<1$; $n$ is irrelevant.
-The automatic burn-in bounds initial-position error relative to the limiting
-radius by $10^{-12}$. Sampling is not an exact attractor representation.
+direction choices from a seeded generator (default seed 20260930). It
+requires $0<r<1$; $n$ is irrelevant. The automatic burn-in bounds
+initial-position error relative to the limiting radius by $10^{-12}$.
+Sampling is not an exact attractor representation.
 \end{description}
 
 \subsection*{Checks performed}
 All 12 tests in \texttt{tests/test\_geometry.py} pass. The principal
-equivalence test executes the unchanged original drawing function with
-an independent minimal Turtle recorder, avoiding a GUI. It compares all
-5,256 segments in order with the reference output; start and end
-coordinates agree within $10^{-10}$ length units. Further tests check
-the explicit word formula, counts, generation lengths, sharp radii,
-dihedral endpoint symmetry, second-generation multiplicities,
-translation, adapter behavior, empty depth, invalid parameters,
-SVG validity, budget rejection, seeded reproducibility and discipline
-around uncertified dimension claims. Numerical tests support the
-implementation; the infinite-set claims depend on the proofs.
+equivalence test executes the drawing function of the original script with
+a minimal Turtle recorder, avoiding a GUI and providing no global turtle.
+It compares all 5,256 segments in order with the reference output; start
+and end coordinates agree within $10^{-10}$ length units. Further tests
+check the explicit word formula, counts, generation lengths, sharp radii,
+dihedral endpoint symmetry, second-generation multiplicities, translation,
+adapter behavior, empty depth, invalid parameters, SVG validity, budget
+rejection, seeded reproducibility and the dimension certificates. The
+software certifies a dimension only under the disk criterion and at scale
+$1/2$ for the triangle and for even $m$; otherwise it reports none.
+Numerical tests support the implementation; the infinite-set claims depend
+on the proofs.
 
 \subsection*{Reproduction}
 Run in the unpacked project directory:
@@ -422,10 +451,10 @@ python3 -m unittest discover -s tests -v
 python3 -m pip install -r requirements.txt
 python3 scripts/make_figures.py
 \end{verbatim}
-The \LaTeX\ source can be built from \texttt{docs/} using two passes of
-\texttt{xelatex}. The unchanged original and package checksums support
-provenance and comparison. Test details are recorded in the included
-\texttt{scripts/verification\_report.json}.
+The \LaTeX\ source builds with
+\texttt{tectonic docs/Adler\_Fractal\_Manuscript.tex}, or from \texttt{docs/}
+with two passes of \texttt{xelatex}. The release archive lists SHA-256
+checksums of all files.
 
 \subsection*{Resource and numerical limitations}
 Enumeration takes time proportional to the number of commands or
@@ -445,38 +474,45 @@ Hutchinson supplies the general compact-attractor and dimension theory
 \cite{tzanov}; Fraser states the condensation-set decomposition and
 Hausdorff-dimension rule \cite{fraser}. The equal-length density proof and
 finite combinatorial calculations here provide direct analyses of the
-supplied parameters, without asserting that these observations are first
+original parameters, without asserting that these observations are first
 discoveries.
 
 The scoped literature check on 30 September 2026 included searches for
 the proposed name, radial recursive stars, equal-length spoke drawings,
 regular polygon IFS and inhomogeneous self-similar sets. The three listed
 primary full texts were examined. This was not an exhaustive review of
-MathSciNet, zbMATH, all books, code archives or unpublished work. An exact
-earlier instance of the supplied finite Turtle program was not established
-by this check. Absence of a located exact instance is not evidence of
-historical priority.
+MathSciNet, zbMATH, all books, code archives or unpublished work. The check
+did not locate an exact earlier instance of this finite Turtle program.
+Absence of a located exact instance is not evidence of historical priority.
 
 \subsection*{Meaning of the proposed name}
-\emph{Adler Fractal} is used here as a proposed descriptive name for the
-documented construction and implementation. Finite drawings have dimension
-one; the original's infinite closure is the plane; contractive limits
-include dust, the classical Sierpinski triangle and a filled square.
-The name does not imply that every parameter choice defines a new or
-noninteger-dimensional fractal. Finiteness of a rendered picture alone
-does not distinguish a fractal approximation from another finite drawing;
-the underlying limiting rule and the specified set are what is analyzed here.
+\emph{Adler Fractal} is my name for the documented construction and its
+implementation: a descriptive proposal, not an established term. Finite
+drawings have dimension one; the original's infinite closure is the plane;
+contractive limits include dust, the classical Sierpinski triangle and
+filled polygons. The name does not imply that every parameter choice defines
+a new or noninteger-dimensional fractal. Finiteness of a rendered picture
+alone does not distinguish a fractal approximation from another finite
+drawing; the underlying limiting rule and the specified set are what is
+analyzed here.
 
-\subsection*{Deposition and licenses}
-This version was prepared for public deposition on Zenodo with the German
-specification, literature-check log, reference code and reproducible figures.
-DOI \texttt{10.5281/zenodo.23057945} was actually reserved before file
-preparation; Zenodo registers it upon publication \cite{zenodo}. Marcus Adler
-authorized public deposition and selected MIT for software and CC BY 4.0
-for original text and figures; the package specifies the respective scopes.
-Independent peer review has not been performed. A DOI makes a deposited
-record citable; it is not a novelty certificate, a peer review or an official
-assignment of the name.
+\subsection*{Publication and licenses}
+This report is archived on Zenodo together with the German specification,
+the literature notes, the reference code and the figures; the DOI on the
+title page resolves to the record. The software is released under the MIT
+license, the text and the figures under CC BY 4.0. The exact scopes are
+stated in \texttt{LICENSE\_DOCUMENTATION.md}. The report has not been peer
+reviewed. A DOI makes a deposited record citable; it is not a
+novelty certificate, a peer review or an official assignment of the name.
+
+\subsection*{Version history}
+\textbf{1.0.1} (\reportdate). The original script draws with the turtle it
+receives. Section~5 no longer states that the closed trace always differs
+from the endpoint attractor, and the case $m=72$, $r=1/2$ is settled
+(Sections~4 and~6). Typographical corrections, updated publication details
+and an editorial revision; the definitions and the three propositions are
+unchanged. \textbf{1.0.0} (30 September 2026). First public version,
+DOI \texttt{10.5281/zenodo.23057945}.
 
 \begingroup
 \small
@@ -497,11 +533,6 @@ attractors of Iterated Function Systems} (2015).
 Studia Mathematica 213 (2012), 133--156.
 \href{https://arxiv.org/abs/1301.1881}{arXiv:1301.1881} (submitted 2013),
 especially \S1.1.
-
-\bibitem{zenodo} Zenodo.
-\emph{Create new upload}. Official deposit documentation.
-\url{https://help.zenodo.org/docs/deposit/create-new-upload/}.
-Accessed 30 September 2026.
 \end{thebibliography}
 \endgroup
 
