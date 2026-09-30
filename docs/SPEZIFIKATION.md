@@ -181,7 +181,7 @@ Version 1.0.0 hat Definition, Standardparameter und Exportsemantik festgelegt. F
 
 Version 1.0.1 ist eine solche Korrektur. Das Originalskript zeichnet jetzt mit dem übergebenen Turtle-Objekt statt mit einem globalen; die Zeichnung bleibt Strich für Strich gleich. Der Bericht behauptet in Abschnitt 5 nicht mehr, dass sich Linienabschluss und Endpunktmenge immer unterscheiden, und der Fall `m = 72`, `r = 1/2` ist geklärt (hier Abschnitte 6 und 7). Die definierten Mengen sind unverändert. Die Einzelheiten stehen im [Änderungsprotokoll](../CHANGELOG.md).
 
-Der Bericht ist auf Zenodo archiviert: DOI [10.5281/zenodo.23057944](https://doi.org/10.5281/zenodo.23057944) (alle Versionen). Die Software steht unter MIT, Texte und Abbildungen unter CC BY 4.0. Ein DOI und ein Datum belegen keine mathematische Priorität. Formalisierung, Text und Referenzimplementierung sind mit KI-Unterstützung entstanden (OpenAI ChatGPT, Überarbeitung mit Anthropic Claude); eine unabhängige fachliche Prüfung gab es nicht.
+Der Bericht ist auf Zenodo archiviert: DOI [10.5281/zenodo.23057944](https://doi.org/10.5281/zenodo.23057944) (alle Versionen), Version 1.0.1 unter [10.5281/zenodo.23063185](https://doi.org/10.5281/zenodo.23063185). Die Software steht unter MIT, Texte und Abbildungen unter CC BY 4.0. Ein DOI und ein Datum belegen keine mathematische Priorität. Formalisierung, Text und Referenzimplementierung sind mit KI-Unterstützung entstanden (OpenAI ChatGPT, Überarbeitung mit Anthropic Claude); eine unabhängige fachliche Prüfung gab es nicht.
 
 ## 9. Primärquellen
 

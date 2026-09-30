@@ -113,5 +113,5 @@ The drawing rule, the original script and the name are mine. The formalization, 
 
 ## Versions
 
-- **1.0.1** — corrected original script and revised report; details in the [changelog](CHANGELOG.md).
+- **1.0.1** — corrected original script and revised report, DOI [10.5281/zenodo.23063185](https://doi.org/10.5281/zenodo.23063185); details in the [changelog](CHANGELOG.md).
 - **1.0.0** — first public version, DOI [10.5281/zenodo.23057945](https://doi.org/10.5281/zenodo.23057945).
