@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `docs/SPEZIFIKATION.md`: two formulas write the less-than sign as `\lt`. GitHub took `<r` for the start of an HTML tag and failed to render the case distinction for the outer radius. The mathematics is unchanged.
+
 ## 1.0.1 — 2026-09-30
 
 A corrected edition. The definitions and the three propositions of the report are unchanged. Zenodo DOI [10.5281/zenodo.23063185](https://doi.org/10.5281/zenodo.23063185).
