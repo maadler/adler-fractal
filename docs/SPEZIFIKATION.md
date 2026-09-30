@@ -77,7 +77,7 @@ Die summierte Länge mit Zeichenmultiplizität ist `L m ∑ₖ₌₀ⁿ⁻¹ (m 
 Der scharfe äußere Radius um `z₀` lautet
 
 ```math
-R_n=\begin{cases}nL,&r=1,\\L(1-r^n)/(1-r),&0<r<1.\end{cases}
+R_n=\begin{cases}nL,&r=1,\\L(1-r^n)/(1-r),&0\lt r\lt 1.\end{cases}
 ```
 
 Die obere Schranke folgt aus der Dreiecksungleichung; ein Wort mit stets derselben Richtung erreicht sie. Jede Figur ist unter den Rotationen und Spiegelungen des regulären `m`-Ecks um den Startpunkt invariant. Bei `n ≥ 1` ist `Aₙ` zusammenhängend und eine endliche Vereinigung nichtdegenerierter Segmente, daher `dim_H Aₙ = 1`.
@@ -161,7 +161,7 @@ Linienabschluss und Endpunktmenge fallen genau dann zusammen, wenn der Anfangsst
 Die Ähnlichkeitsdimension `s = log(m)/log(1/r)` ist nur bei nachgewiesenen geeigneten Trennungsbedingungen die Hausdorff-Dimension von `K`. Allgemein gilt lediglich `dim_H K ≤ min(2,s)`. Ein hinreichendes, nicht notwendiges Kriterium für starke Trennung lautet
 
 ```math
-r<\frac{\sin(\pi/m)}{1+\sin(\pi/m)}.
+r\lt\frac{\sin(\pi/m)}{1+\sin(\pi/m)}.
 ```
 
 Beweis: `fⱼ(K)` liegt in der Kreisscheibe um `L uⱼ` mit Radius `rL/(1-r)`. Die minimalen Mittelpunktabstände sind `2L sin(π/m)`. Das Kriterium macht die Scheiben disjunkt. Daraus folgen die offene Mengenbedingung und die übliche Dimensionsformel.
