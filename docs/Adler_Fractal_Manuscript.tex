@@ -5,8 +5,8 @@
 \usepackage{graphicx,booktabs,array,xcolor,fancyhdr,enumitem}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[colorlinks=true,urlcolor=teal,linkcolor=teal,citecolor=teal]{hyperref}
-\newcommand{\reportversion}{1.0.1}
-\newcommand{\reportdate}{30 September 2026}
+\newcommand{\reportversion}{1.1.0}
+\newcommand{\reportdate}{1 November 2026}
 \hypersetup{pdftitle={The Adler Fractal: A Recursive Radial Drawing and Its Polygon-IFS Limits},pdfauthor={Marcus Adler},pdfsubject={Technical report, version \reportversion, \reportdate}}
 \definecolor{ink}{HTML}{243D55}
 \definecolor{teal}{HTML}{23858B}
@@ -39,7 +39,7 @@
 \vspace{4mm}
 {\large Marcus Adler\par}
 {\small Version \reportversion, \reportdate. Not peer reviewed.\par}
-{\small DOI: \href{https://doi.org/10.5281/zenodo.23063185}{\texttt{10.5281/zenodo.23063185}} (this version), \href{https://doi.org/10.5281/zenodo.23057944}{\texttt{10.5281/zenodo.23057944}} (all versions).\par}
+{\small DOI: \href{https://doi.org/10.5281/zenodo.23867302}{\texttt{10.5281/zenodo.23867302}} (this version), \href{https://doi.org/10.5281/zenodo.23057944}{\texttt{10.5281/zenodo.23057944}} (all versions).\par}
 
 \sectiontitle{Abstract}
 This report documents a recursive radial drawing that I first wrote as a
@@ -48,7 +48,8 @@ node draws equally spaced spokes in the same absolute directions; the next
 generation starts at their endpoints. The original uses 72 directions, two
 generations and spokes of constant length. The report separates the
 accumulated trace, the endpoint sets and their closures, and derives command
-counts, endpoint multiplicities and sharp radius bounds. For the equal-length
+counts, endpoint multiplicities, sharp radius bounds and the tangent circles
+that form the rings of the drawing. For the equal-length
 original, the union of all endpoint generations is dense in the plane.
 Contractive variants produce established regular polygon iterated function
 systems; their trace closures are established inhomogeneous self-similar
@@ -57,7 +58,7 @@ the original script, proofs and reproducible figures accompany the report.
 I claim neither a new fractal family nor historical priority.
 
 \begin{center}
-\includegraphics[width=98mm]{adler_original.png}
+\includegraphics[width=93mm]{adler_original.png}
 \captionof{figure}{Original geometry: $m=72$, $n=2$, $L=200$, $r=1$.
 The 5,256 drawing commands create a tightly packed radial rosette. Color and
 stroke width are rendering choices, not part of the geometric definition.}
@@ -174,7 +175,10 @@ For $r=1$ and $n=2$,
 =2L\left|\cos\frac{\pi(a-b)}m\right|.
 \]
 These discrete radii explain the rings in the endpoint pattern. They do not
-assert that entire circles are present in the trace.
+assert that entire circles are present in the trace. The rings that dominate
+the drawing of the trace inside the circle $|z|=L$ are tangent circles of its
+segments (Proposition~2 and the remarks after it); near the center they
+almost coincide with these endpoint radii.
 
 Still with $r=1$, for even $m$ the second endpoint set has exactly
 $m^2/2+1$ distinct points. Indeed, $p_{(a,b)}/2$ is the midpoint of the chord
@@ -185,8 +189,87 @@ zero, and all other pairs remain distinct. Hence the count is
 $m(m+1)/2-m/2+1$. For $m=72$, 5,184 endpoint addresses therefore represent
 only 2,593 points. The origin has 72 ordered addresses.
 
+\subsection*{Tangent circles and chords of the second generation}
+Keep $r=1$. For direction indices $a,b$ let $\delta=2\pi(b-a)/m$ be the angle
+from $u_a$ to $u_b$, and let $\sigma_{a,b}=[Lu_a,L(u_a+u_b)]$ be the
+corresponding second-generation segment. It starts on the \emph{node circle}
+$|z|=L$, where the spokes of the first generation end.
+
+\begin{proposition}
+If $\cos\delta\le0$, the point of $\sigma_{a,b}$ nearest to the origin is
+$L(u_a-\cos\delta\,u_b)$, at distance $L|\sin\delta|$. Thus $\sigma_{a,b}$
+touches the circle $|z|=L|\sin\delta|$ and does not enter the open disk it
+bounds. If $\cos\delta>0$, the nearest point is the starting point $Lu_a$.
+A chord $[Lu_a,Lu_c]$ of the node circle with $c\not\equiv a\pmod m$ lies in
+$A_2$ if and only if $m$ is even and $c-a\equiv m/2\pmod2$.
+\end{proposition}
+\begin{proof}
+For $0\le t\le1$,
+\[
+|u_a+tu_b|^2=1+2t\cos\delta+t^2=\sin^2\delta+(t+\cos\delta)^2.
+\]
+Over the real line the minimum lies at $t=-\cos\delta$, which belongs to
+$[0,1]$ exactly when $\cos\delta\le0$; otherwise the expression increases on
+$[0,1]$. Multiplying by $L$ gives the first two claims.
+
+Now let $m$ be even and $\cos\delta<0$. The line of $\sigma_{a,b}$ meets the
+node circle again at $t=-2\cos\delta$, in the point
+$L(u_a-2\cos\delta\,u_b)=-Le^{2i\delta}u_a=Lu_c$ with
+$c=2b-a-m/2$, an index because $m$ is even. The segment
+$\sigma_{c,b+m/2}$ starts there and runs back along the same line, since
+$u_{b+m/2}=-u_b$. Both segments have length $L$ and the chord has length
+$2L|\cos\delta|\le2L$, so together they cover it. As $b-a$ runs through the
+residues with $\cos\delta<0$, the difference $c-a=2(b-a)-m/2$ runs through
+all residues $j\not\equiv0\pmod m$ with $j\equiv m/2\pmod2$.
+
+Conversely, $A_2$ is a finite union of segments with directions $\pm u_j$. A
+nondegenerate segment inside it meets every piece that is not collinear with
+it in at most one point, so it is covered by collinear pieces and is
+parallel to some $u_j$. The chord $[Lu_a,Lu_c]$ has the direction angle
+$\theta+\pi(a+c)/m+\pi/2$, so it is parallel to $u_j$ exactly when
+$a+c+m/2\equiv2j\pmod m$. For odd $m$ the left side is not an integer. For
+even $m$ such a $j$ exists exactly when $a+c+m/2$ is even, that is, when
+$c-a\equiv m/2\pmod2$.
+\end{proof}
+
+For the original, $\delta$ is a multiple of $5^\circ$. Call the $m$ segments
+$\sigma_{a,a+d}$ with fixed $d$ a \emph{segment class}; the classes $d$ and
+$-d$ touch the same circle. The classes with $\cos\delta\le0$ touch the
+circles of radius $L\sin(5k^\circ)$, $k=0,\ldots,18$: the center for $k=0$,
+where segments point straight back; the node circle for $k=18$, which
+segments touch at their starting points; and 17 circles in between. The
+identity in the proof shows why these circles are visible. Along a segment,
+the distance $\rho$ from the origin changes only quadratically near the
+point of contact, so on each side of that point a segment carries the arc
+length $\rho/\sqrt{\rho^2-h^2}$ per unit of radius, where $h>0$ is the
+tangent radius; this is unbounded as $\rho\to h$. The $m$ rotated copies in
+a segment class therefore crowd along their common tangent circle, as
+threads do in string art. The prominent concentric rings inside the node
+circle in Figure~1 lie at these radii, the outermost ones merging into the
+dark band along the node circle; none of them is drawn as a curve.
+
+For $\cos\delta\le0$, the endpoint of $\sigma_{a,b}$ lies
+$L(1+\cos\delta)=2L\cos^2(\delta/2)$ beyond the point of contact, and the
+tangent radius $L|\sin\delta|$ is $|\sin(\delta/2)|$ times the endpoint
+radius $2L|\cos(\delta/2)|$. For $\delta$ close to $\pi$ a segment ends just
+after touching its circle, so near the center the tangent radii and the
+endpoint radii above nearly agree: $L\sin5^\circ\approx0.0872L$ against
+$2L\sin2.5^\circ\approx0.0872L$. Further out they separate, for example
+$L\sin40^\circ\approx0.643L$ against $2L\sin20^\circ\approx0.684L$; in
+Figure~1 the endpoint radii add at most faint features.
+
+For $m=72$ the chords in $A_2$ are exactly those with an even index
+difference, with central angles $10^\circ,20^\circ,\ldots,180^\circ$. At
+$\delta=\pm120^\circ$ a single segment already joins two nodes, and these
+chords form 12 regular hexagons. The second generation thus contains closed
+regular polygons and star polygons inscribed in the node circle, with vertex
+steps $2,4,\ldots,36$, from the convex 36-gon to the diameters. Each of them
+is a periodic path of a ball reflected inside that circle. Such a path
+closes because its central angle $2\pi j/m$ is a rational fraction of a full
+turn; with an irrational fraction it would never close.
+
 \newpage
-% Page 4
+% Page 5
 \sectiontitle{3. The infinite equal-length original is dense in the plane}
 This section concerns the union over \emph{all} depths, not the finite
 picture on page 1. Keep $m=72$, $r=1$ and $\theta=0$.
@@ -244,7 +327,7 @@ limit is not available. Density is a property of the union's closure;
 it does not make the unclosed countable endpoint union two-dimensional.
 
 \newpage
-% Page 5
+% Page 6
 \sectiontitle{4. Contractive endpoints: an established polygon IFS}
 For $0<r<1$, define the infinite endpoint set
 \begin{equation}
@@ -310,7 +393,7 @@ is no dimension at all. For odd $m$ the point $-v_j$ lies outside $P$ and
 the center is not covered.
 
 \newpage
-% Page 6
+% Page 7
 \sectiontitle{5. The accumulated trace and its closed limit}
 Let $O=\bigcup_{n\ge1}A_n$ and $S=\overline O$ for $0<r<1$. The persistent
 initial star generally separates the closed trace from the endpoint
@@ -361,7 +444,7 @@ Connectedness of the trace and disconnectedness of many endpoint
 attractors are compatible with these dimension statements.
 
 \newpage
-% Page 7
+% Page 8
 \sectiontitle{6. Representative endpoint variants}
 \begin{center}
 \includegraphics[width=\linewidth]{endpoint_variants.pdf}
@@ -404,7 +487,7 @@ image resolution, repeated overdraw or apparent empty regions in the point
 samples.
 
 \newpage
-% Page 8
+% Page 9
 \sectiontitle{7. Reference software and verification}
 The package \texttt{adler\_fractal/} implements the definitions with
 Python floating-point coordinates. Geometry and SVG export use only the
@@ -427,13 +510,14 @@ Sampling is not an exact attractor representation.
 \end{description}
 
 \subsection*{Checks performed}
-All 12 tests in \texttt{tests/test\_geometry.py} pass. The principal
+All 13 tests in \texttt{tests/test\_geometry.py} pass. The principal
 equivalence test executes the drawing function of the original script with
 a minimal Turtle recorder, avoiding a GUI and providing no global turtle.
 It compares all 5,256 segments in order with the reference output; start
 and end coordinates agree within $10^{-10}$ length units. Further tests
 check the explicit word formula, counts, generation lengths, sharp radii,
-dihedral endpoint symmetry, second-generation multiplicities, translation,
+dihedral endpoint symmetry, second-generation multiplicities, the tangent
+circles and chords of Proposition~2, translation,
 adapter behavior, empty depth, invalid parameters, SVG validity, budget
 rejection, seeded reproducibility and the dimension certificates. The
 software certifies a dimension only under the disk criterion and at scale
@@ -465,7 +549,7 @@ writing an SVG; it can be raised explicitly. Float rounding and rendering
 choices do not change the exact mathematical definition.
 
 \newpage
-% Page 9
+% Page 10
 \sectiontitle{8. Related work, scope and publication status}
 The contractive endpoint system is an established polygon-vertex IFS.
 The trace closure is an established inhomogeneous self-similar set.
@@ -506,12 +590,12 @@ reviewed. A DOI makes a deposited record citable; it is not a
 novelty certificate, a peer review or an official assignment of the name.
 
 \subsection*{Version history}
-\textbf{1.0.1} (\reportdate), DOI \texttt{10.5281/zenodo.23063185}. The
-original script draws with the turtle it receives. Section~5 no longer
-states that the closed trace always differs from the endpoint attractor, and
-the case $m=72$, $r=1/2$ is settled (Sections~4 and~6). Typographical and
-editorial corrections; the definitions and the three propositions are
-unchanged. \textbf{1.0.0} (30 September 2026), DOI
+\textbf{1.1.0} (\reportdate), DOI \texttt{10.5281/zenodo.23867302}. New
+Proposition~2 on tangent circles and chords; the former Propositions~2
+and~3 are now~3 and~4. \textbf{1.0.1}
+(30 September 2026), DOI \texttt{10.5281/zenodo.23063185}. Corrections
+to the original script, to Section~5 and to the case $m=72$, $r=1/2$;
+the definitions and the three propositions were unchanged. \textbf{1.0.0} (30 September 2026), DOI
 \texttt{10.5281/zenodo.23057945}. First public version.
 
 \begingroup

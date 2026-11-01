@@ -170,6 +170,76 @@ class GeometryTests(unittest.TestCase):
                   (corners[0] + corners[1] + corners[3]) / 3):
             self.assertLessEqual(min(abs(z - e) for e in ends), bound + 1e-12)
 
+    def test_second_generation_tangent_circles_and_chords(self):
+        def nearest(start, end, x=0j):
+            d = end - start
+            t = min(1.0, max(0.0, ((x - start) * d.conjugate()).real / abs(d) ** 2))
+            return start + t * d
+
+        def chord_in_trace(z0, z1, segments):
+            """Whether the collinear segments cover [z0, z1], compared as parameter intervals."""
+            d = z1 - z0
+            cross = lambda w: (w * d.conjugate()).imag
+            pieces = []
+            for s, e in segments:
+                if abs(cross(e - s)) > 1e-9 * abs(d) * abs(e - s) or abs(cross(s - z0)) > 1e-9 * abs(d):
+                    continue
+                pieces.append(sorted(((w - z0) * d.conjugate()).real / abs(d) ** 2 for w in (s, e)))
+            reach = 0.0
+            for t0, t1 in sorted(pieces):
+                if t0 > reach + 1e-9:
+                    break
+                reach = max(reach, t1)
+            return reach >= 1 - 1e-9
+
+        key = lambda seg: tuple(round(v, 9) for z in seg for v in (z.real, z.imag))
+
+        # Proposition 2: a segment with cos δ <= 0 touches the circle of radius L|sin δ|
+        # at L(u_a - cos δ u_b) and ends L(1 + cos δ) further on; otherwise it is
+        # nearest to the origin at its start.
+        for m, phase in ((72, 0), (10, 17)):
+            p = Parameters(spokes=m, length=1, phase_degrees=phase)
+            u = p.directions
+            trace = {key((s.start, s.end)) for s in iter_segments(p) if s.generation == 2}
+            radii = set()
+            for a, b in itertools.product(range(m), repeat=2):
+                delta = 2 * math.pi * (b - a) / m
+                seg = (u[a], u[a] + u[b])
+                self.assertIn(key(seg), trace)
+                q = nearest(*seg)
+                if math.cos(delta) <= 1e-12:
+                    self.assertLess(abs(q - (u[a] - math.cos(delta) * u[b])), 1e-12)
+                    self.assertAlmostEqual(abs(q), abs(math.sin(delta)), places=12)
+                    self.assertAlmostEqual(abs(seg[1] - q), 2 * math.cos(delta / 2) ** 2, places=12)
+                    self.assertAlmostEqual(abs(q), abs(math.sin(delta / 2)) * abs(seg[1]), places=12)
+                    radii.add(round(abs(q), 9))
+                else:
+                    self.assertLess(abs(q - u[a]), 1e-12)
+            if m == 72:
+                self.assertEqual(radii, {round(math.sin(math.radians(5 * k)), 9) for k in range(19)})
+
+        # Exactly the chords with c - a ≡ m/2 (mod 2) lie in A_2, and none for odd m.
+        for m in range(3, 13):
+            p = Parameters(spokes=m, length=1, phase_degrees=17)
+            u = p.directions
+            segments = [(s.start, s.end) for s in iter_segments(p)]
+            for a, c in itertools.combinations(range(m), 2):
+                expected = m % 2 == 0 and (c - a - m // 2) % 2 == 0
+                self.assertEqual(chord_in_trace(u[a], u[c], segments), expected, (m, a, c))
+
+        # The original: a segment and the one running back from the far node cover
+        # every chord with an even index difference.
+        p = Parameters(length=1)
+        m, u = p.spokes, p.directions
+        trace = {key((s.start, s.end)) for s in iter_segments(p) if s.generation == 2}
+        for a, j in itertools.product(range(m), range(2, m, 2)):
+            b = (a + (j + m // 2) // 2) % m
+            c = (a + j) % m
+            pieces = [(u[a], u[a] + u[b]), (u[c], u[c] + u[(b + m // 2) % m])]
+            for piece in pieces:
+                self.assertIn(key(piece), trace)
+            self.assertTrue(chord_in_trace(u[a], u[c], pieces))
+
 
 if __name__ == "__main__":
     unittest.main()

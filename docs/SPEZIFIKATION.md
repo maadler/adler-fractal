@@ -1,6 +1,6 @@
-# Adler-Fraktal: mathematische Spezifikation v1.0.1
+# Adler-Fraktal: mathematische Spezifikation v1.1.0
 
-**Marcus Adler** · Stand 30. September 2026 · technischer Bericht, nicht unabhängig begutachtet
+**Marcus Adler** · Stand 1. November 2026 · technischer Bericht, nicht unabhängig begutachtet
 
 Diese Spezifikation legt fest, was ich unter dem Adler-Fraktal verstehe: die Zeichenvorschrift aus meinem Turtle-Skript `original/eagle_fractal.py`, ihre Parameter und die Mengen, die daraus entstehen. Der Name ist mein Vorschlag für diese Konstruktion, kein etablierter mathematischer Begriff, und ich beanspruche weder Neuheit noch Priorität. Dieselben Aussagen stehen englisch im [Bericht](Adler_Fractal_Manuscript.pdf).
 
@@ -88,7 +88,27 @@ Für `r = 1`, `n = 2` gilt
 \lvert p_{(a,b)}-z_0\rvert=2L\left|\cos\frac{\pi(a-b)}m\right|.
 ```
 
-Das erklärt die konzentrischen diskreten Endpunktradien. Weiterhin mit `r = 1` ist bei geradem `m` die Anzahl verschiedener Endpunkte `|E₂| = m²/2 + 1`. Beweis: `p_(a,b)/2` ist der Mittelpunkt der Sehne von `L u_a` nach `L u_b` (für `a = b` ein einzelner Punkt des Kreises), und ein von null verschiedener Mittelpunkt bestimmt das ungeordnete Paar eindeutig. Von `m(m+1)/2` ungeordneten Paaren bilden die `m/2` antipodalen Paare alle den gleichen Mittelpunkt null. Beim Original ergeben sich **2.593 verschiedene Endpunkte**; null hat 72 geordnete Adressen. Die Kreisradien beschreiben Endpunkte, nicht ausgefüllte Kreislinien.
+Das erklärt die konzentrischen diskreten Endpunktradien. Weiterhin mit `r = 1` ist bei geradem `m` die Anzahl verschiedener Endpunkte `|E₂| = m²/2 + 1`. Beweis: `p_(a,b)/2` ist der Mittelpunkt der Sehne von `L u_a` nach `L u_b` (für `a = b` ein einzelner Punkt des Kreises), und ein von null verschiedener Mittelpunkt bestimmt das ungeordnete Paar eindeutig. Von `m(m+1)/2` ungeordneten Paaren bilden die `m/2` antipodalen Paare alle den gleichen Mittelpunkt null. Beim Original ergeben sich **2.593 verschiedene Endpunkte**; null hat 72 geordnete Adressen. Die Kreisradien beschreiben Endpunkte, nicht ausgefüllte Kreislinien. Die Ringe, die die Zeichnung innerhalb des Kreises `|z| = L` prägen, sind Berührkreise der Striche (nächster Unterabschnitt); nahe der Mitte fallen sie fast mit diesen Endpunktradien zusammen.
+
+### Berührkreise und Sehnen der zweiten Generation
+
+Weiter mit `r = 1`. Für Richtungsindizes `a, b` sei `δ = 2π(b − a)/m` der Winkel von `u_a` nach `u_b` und `σ_(a,b) = [L u_a, L(u_a + u_b)]` der zugehörige Strich der zweiten Generation. Er beginnt auf dem **Knotenkreis** `|z| = L`, wo die Speichen der ersten Generation enden. Für `0 ≤ t ≤ 1` gilt
+
+```math
+|u_a+t\,u_b|^2=1+2t\cos\delta+t^2=\sin^2\delta+(t+\cos\delta)^2.
+```
+
+Das Minimum über alle reellen `t` liegt bei `t = −cos δ`, und das liegt genau dann in `[0, 1]`, wenn `cos δ ≤ 0` ist. Daraus folgt: Ist `cos δ ≤ 0`, dann ist `L(u_a − cos δ · u_b)` der mittennächste Punkt von `σ_(a,b)`, im Abstand `L|sin δ|`. Der Strich berührt den Kreis mit diesem Radius und dringt nicht in die offene Kreisscheibe ein. Ist `cos δ > 0`, ist der Startpunkt `L u_a` der mittennächste Punkt.
+
+Die `m` Striche `σ_(a,a+d)` mit festem `d` bilden eine **Strichklasse**; die Klassen `d` und `−d` berühren denselben Kreis. Beim Original ist `δ` ein Vielfaches von 5°. Die Klassen mit `cos δ ≤ 0` berühren die Kreise mit den Radien `L sin(5k°)`, `k = 0, …, 18`: den Mittelpunkt (`k = 0`, die Striche laufen genau zurück), den Knotenkreis selbst (`k = 18`, Berührung im Startpunkt) und 17 Kreise dazwischen. Dass man sie sieht, folgt aus derselben Identität: Nahe dem Berührpunkt ändert sich der Abstand `ρ` zur Mitte nur quadratisch. Auf jeder Seite des Berührpunkts trägt ein Strich deshalb pro Radiuseinheit die Bogenlänge `ρ/√(ρ² − h²)`, wobei `h > 0` der Berührradius ist; für `ρ → h` ist das unbeschränkt. Die `m` gedrehten Kopien einer Strichklasse drängen sich so an ihrem gemeinsamen Berührkreis, wie Fäden in einem Fadenbild. Auf diesen Radien liegen die deutlichen konzentrischen Ringe innerhalb des Knotenkreises in der Originalabbildung; die äußersten verschmelzen zum dunklen Band am Knotenkreis. Keiner davon ist als Kurve gezeichnet.
+
+Für `cos δ ≤ 0` liegt der Endpunkt von `σ_(a,b)` `L(1 + cos δ) = 2L cos²(δ/2)` hinter dem Berührpunkt, und der Berührradius `L|sin δ|` ist das `|sin(δ/2)|`-Fache des Endpunktradius `2L|cos(δ/2)|`. Für `δ` nahe 180° endet ein Strich kurz nach der Berührung. Nahe der Mitte stimmen Berührkreise und Endpunktradien deshalb fast überein: `L sin 5° ≈ 0,0872 L` gegen `2L sin 2,5° ≈ 0,0872 L`. Weiter außen trennen sie sich, etwa `L sin 40° ≈ 0,643 L` gegen `2L sin 20° ≈ 0,684 L`; in der Originalabbildung tragen die Endpunktradien höchstens schwache Spuren bei.
+
+**Sehnen.** Sei `m` gerade und `cos δ < 0`. Die Gerade von `σ_(a,b)` trifft den Knotenkreis wieder bei `t = −2 cos δ`, im Punkt `L(u_a − 2 cos δ · u_b) = −L e^(2iδ) u_a = L u_c` mit `c = 2b − a − m/2`; das ist ein Index, weil `m` gerade ist. Dort beginnt der Strich `σ_(c, b+m/2)` und läuft auf derselben Geraden zurück, denn `u_(b+m/2) = −u_b`. Beide Striche sind `L` lang, die Sehne höchstens `2L`; zusammen decken sie sie ganz ab. Läuft `b − a` durch alle Reste mit `cos δ < 0`, dann durchläuft `c − a = 2(b − a) − m/2` alle Reste `j ≢ 0 (mod m)` mit `j ≡ m/2 (mod 2)`. Bei geradem `m` enthält `A₂` also jede solche Sehne `[L u_a, L u_c]` des Knotenkreises.
+
+Andere Sehnen enthält `A₂` nicht. `A₂` ist eine endliche Vereinigung von Strichen mit den Richtungen `±u_j`. Eine nicht entartete Strecke darin trifft jeden nicht kollinearen Strich in höchstens einem Punkt, wird also von kollinearen Strichen überdeckt und ist zu einem `u_j` parallel. Die Sehne `[L u_a, L u_c]` hat den Richtungswinkel `θ + π(a + c)/m + π/2`; sie ist genau dann zu `u_j` parallel, wenn `a + c + m/2 ≡ 2j (mod m)` gilt. Bei ungeradem `m` ist die linke Seite keine ganze Zahl, bei geradem `m` gibt es ein solches `j` genau dann, wenn `a + c + m/2` gerade ist, also `c − a ≡ m/2 (mod 2)`. Insgesamt: Eine Sehne `[L u_a, L u_c]` mit `c ≢ a (mod m)` liegt genau dann in `A₂`, wenn `m` gerade ist und `c − a ≡ m/2 (mod 2)` gilt.
+
+Beim Original sind das genau die Sehnen mit geradem Indexabstand, mit Mittelpunktswinkeln 10°, 20°, …, 180°. Bei `δ = ±120°` verbindet schon ein einzelner Strich zwei Knoten; diese Sehnen bilden 12 regelmäßige Sechsecke. Die zweite Generation enthält damit geschlossene regelmäßige Vielecke und Sternpolygone im Knotenkreis, mit den Eckenschritten 2, 4, …, 36, vom konvexen 36-Eck bis zu den Durchmessern. Jedes davon ist die periodische Bahn einer Kugel, die im Kreis reflektiert wird. Eine solche Bahn schließt sich, weil ihr Mittelpunktswinkel `2πj/m` ein rationaler Teil einer Umdrehung ist; bei einem irrationalen Teil würde sie sich nie schließen.
 
 ## 5. Gleich lange Linien: der unendliche Originalfall
 
@@ -177,11 +197,13 @@ Beweis: `fⱼ(K)` liegt in der Kreisscheibe um `L uⱼ` mit Radius `rL/(1-r)`. D
 
 ## 8. Versionen und Veröffentlichung
 
-Version 1.0.0 hat Definition, Standardparameter und Exportsemantik festgelegt. Fehlerkorrekturen ohne Änderung der definierten Mengen erhöhen die Patch-Version. Zusätzliche ausdrücklich benannte Konstruktionen erhöhen die Minor-Version. Änderungen an den geometrischen Regeln oder der Bedeutung bestehender Parameter erfordern eine Major-Version.
+Version 1.0.0 hat Definition, Standardparameter und Exportsemantik festgelegt. Fehlerkorrekturen ohne Änderung der definierten Mengen erhöhen die Patch-Version. Zusätzliche ausdrücklich benannte Konstruktionen und neue Aussagen über die bestehenden Mengen erhöhen die Minor-Version. Änderungen an den geometrischen Regeln oder der Bedeutung bestehender Parameter erfordern eine Major-Version.
 
 Version 1.0.1 ist eine solche Korrektur. Das Originalskript zeichnet jetzt mit dem übergebenen Turtle-Objekt statt mit einem globalen; die Zeichnung bleibt Strich für Strich gleich. Der Bericht behauptet in Abschnitt 5 nicht mehr, dass sich Linienabschluss und Endpunktmenge immer unterscheiden, und der Fall `m = 72`, `r = 1/2` ist geklärt (hier Abschnitte 6 und 7). Die definierten Mengen sind unverändert. Die Einzelheiten stehen im [Änderungsprotokoll](../CHANGELOG.md).
 
-Der Bericht ist auf Zenodo archiviert: DOI [10.5281/zenodo.23057944](https://doi.org/10.5281/zenodo.23057944) (alle Versionen), Version 1.0.1 unter [10.5281/zenodo.23063185](https://doi.org/10.5281/zenodo.23063185). Die Software steht unter MIT, Texte und Abbildungen unter CC BY 4.0. Ein DOI und ein Datum belegen keine mathematische Priorität. Formalisierung, Text und Referenzimplementierung sind mit KI-Unterstützung entstanden (OpenAI ChatGPT, Überarbeitung mit Anthropic Claude); eine unabhängige fachliche Prüfung gab es nicht.
+Version 1.1.0 ergänzt die Berührkreise und Sehnen der zweiten Generation (Abschnitt 4, im Bericht Proposition 2). Die bisherigen Propositionen 2 und 3 des Berichts heißen jetzt 3 und 4, ihre Aussagen sind unverändert, ebenso die Definitionen und die definierten Mengen.
+
+Der Bericht ist auf Zenodo archiviert: DOI [10.5281/zenodo.23057944](https://doi.org/10.5281/zenodo.23057944) (alle Versionen), Version 1.1.0 unter [10.5281/zenodo.23867302](https://doi.org/10.5281/zenodo.23867302), Version 1.0.1 unter [10.5281/zenodo.23063185](https://doi.org/10.5281/zenodo.23063185). Die Software steht unter MIT, Texte und Abbildungen unter CC BY 4.0. Ein DOI und ein Datum belegen keine mathematische Priorität. Formalisierung, Text und Referenzimplementierung sind mit KI-Unterstützung entstanden (OpenAI ChatGPT, Überarbeitung mit Anthropic Claude); eine unabhängige fachliche Prüfung gab es nicht.
 
 ## 9. Primärquellen
 

@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this work, please cite the technical report."
 type: software
 title: "Adler Fractal: Recursive Radial Construction and Reference Implementation"
-version: 1.0.1
-date-released: 2026-09-30
+version: 1.1.0
+date-released: 2026-11-01
 license: MIT
 doi: 10.5281/zenodo.23057944
 url: "https://doi.org/10.5281/zenodo.23057944"
@@ -22,6 +22,9 @@ identifiers:
     value: 10.5281/zenodo.23057944
     description: "All versions; resolves to the latest one"
   - type: doi
+    value: 10.5281/zenodo.23867302
+    description: "Version 1.1.0"
+  - type: doi
     value: 10.5281/zenodo.23063185
     description: "Version 1.0.1"
   - type: doi
@@ -34,7 +37,7 @@ preferred-citation:
     - family-names: Adler
       given-names: Marcus
   year: 2026
-  version: 1.0.1
+  version: 1.1.0
   publisher:
     name: Zenodo
   doi: 10.5281/zenodo.23057944

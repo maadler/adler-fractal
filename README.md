@@ -9,7 +9,7 @@ Seventy-two spokes from one point — and the same seventy-two again from the ti
   <img src="figures/adler_original.png" width="560" alt="The original drawing: 72 directions, two generations, 5,256 line segments">
 </p>
 
-That is all the drawing rule does. I wrote it in September 2026 as a short Python Turtle script ([`original/eagle_fractal.py`](original/eagle_fractal.py) — *Adler* is German for eagle), liked the picture, and wanted to know what I had actually drawn. This repository is the long answer: a precise definition, proofs, a reference implementation that needs no Turtle window, and a nine-page [report](docs/Adler_Fractal_Manuscript.pdf).
+That is all the drawing rule does. I wrote it in September 2026 as a short Python Turtle script ([`original/eagle_fractal.py`](original/eagle_fractal.py) — *Adler* is German for eagle), liked the picture, and wanted to know what I had actually drawn. This repository is the long answer: a precise definition, proofs, a reference implementation that needs no Turtle window, and a ten-page [report](docs/Adler_Fractal_Manuscript.pdf).
 
 The short answer is more modest than the name. The finite drawing is a union of line segments, so its dimension is 1. Continued forever with spokes of equal length, the endpoints come arbitrarily close to every point of the plane — there is no bounded limit figure. Only when the spokes shrink from generation to generation does a classical fractal limit appear, and that limit is a well-known one: a regular polygon iterated function system. So I claim no new fractal family and no priority. *Adler Fractal* is simply my name for this drawing rule and its variants.
 
@@ -19,6 +19,8 @@ The short answer is more modest than the name. The finite drawing is a union of 
 | --- | --- |
 | Original: 72 directions, length 200, depth 2 | 5,256 drawing commands, outer radius 400 |
 | Endpoints of the second generation | 5,184 addresses, but only 2,593 distinct points |
+| Rings in the picture | Not drawn circles: segments turning inward by the same angle δ all touch the circle of radius `L·\|sin δ\|` — for the original `L·sin(5k°)` |
+| Chords of the circle of radius `L` in the second generation | Exactly those whose index difference has the parity of m/2, and only for even m: closed regular polygons and star polygons |
 | Depth 3 / depth 4 | 378,504 / 27,252,360 drawing commands |
 | Any finite drawing of positive depth | Hausdorff dimension 1 |
 | Equal-length original, all generations together | Endpoints dense in the plane; the closure of the lines is the whole plane |
@@ -77,7 +79,7 @@ With a fixed `SOURCE_DATE_EPOCH` two builds give the same file, byte for byte.
 | `original/eagle_fractal.py` | My original Turtle script. Version 1.0.1 fixes one thing in it, see below |
 | `adler_fractal/` | Reference implementation: geometry and SVG export, standard library only |
 | `turtle_reference.py` | The reference implementation drawn with a real Turtle |
-| `tests/` | 12 tests, among them a comparison of all 5,256 segments with the original script |
+| `tests/` | 13 tests, among them a comparison of all 5,256 segments with the original script |
 | `docs/Adler_Fractal_Manuscript.pdf` | The report, in English, with its LaTeX source next to it |
 | `docs/SPEZIFIKATION.md` | The mathematical specification, in German |
 | `docs/LITERATURPRUEFUNG.md` | What the literature check covered and what it did not, in German |
@@ -99,7 +101,7 @@ By default the export refuses to draw or sample more than one million elements. 
 
 ## Citing
 
-> Marcus Adler: *The Adler Fractal: A Recursive Radial Drawing and Its Polygon-IFS Limits.* Technical report, version 1.0.1. Zenodo, 2026. https://doi.org/10.5281/zenodo.23057944
+> Marcus Adler: *The Adler Fractal: A Recursive Radial Drawing and Its Polygon-IFS Limits.* Technical report, version 1.1.0. Zenodo, 2026. https://doi.org/10.5281/zenodo.23057944
 
 This DOI always resolves to the latest version; every version also has a DOI of its own on Zenodo. Machine-readable data is in [`CITATION.cff`](CITATION.cff).
 
@@ -109,9 +111,10 @@ The software is under the [MIT license](LICENSE), the text and the figures under
 
 ## How this was made
 
-The drawing rule, the original script and the name are mine. The formalization, the proofs, the text of the report and the reference implementation were prepared with AI assistance (OpenAI ChatGPT; revised with Anthropic Claude for version 1.0.1). The numbers are covered by the tests and the references were checked against the sources, but there has been no independent mathematical review. If you find a mistake, please open an issue.
+The drawing rule, the original script and the name are mine. The formalization, the proofs, the text of the report and the reference implementation were prepared with AI assistance (OpenAI ChatGPT; revised with Anthropic Claude for versions 1.0.1 and 1.1.0). The numbers are covered by the tests and the references were checked against the sources, but there has been no independent mathematical review. If you find a mistake, please open an issue.
 
 ## Versions
 
+- **1.1.0** — tangent circles and chords of the second generation (new Proposition 2), DOI [10.5281/zenodo.23867302](https://doi.org/10.5281/zenodo.23867302); details in the [changelog](CHANGELOG.md).
 - **1.0.1** — corrected original script and revised report, DOI [10.5281/zenodo.23063185](https://doi.org/10.5281/zenodo.23063185); details in the [changelog](CHANGELOG.md).
 - **1.0.0** — first public version, DOI [10.5281/zenodo.23057945](https://doi.org/10.5281/zenodo.23057945).

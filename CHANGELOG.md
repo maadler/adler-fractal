@@ -1,7 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 — 2026-11-01
 
+Tangent circles and chords of the second generation. Zenodo DOI [10.5281/zenodo.23867302](https://doi.org/10.5281/zenodo.23867302).
+
+- Report: a new Proposition 2 in Section 2; `docs/SPEZIFIKATION.md` adds the same in Section 4. A second-generation segment whose direction differs from its starting spoke by an angle δ with cos δ ≤ 0 touches the circle of radius L·|sin δ| and does not enter it; for the original these are the circles L·sin(5k°), k = 0 … 18. They, and not the endpoint radii, are the rings that dominate the drawing inside the circle of radius L; near the center both nearly coincide. A chord of that circle between two spoke tips lies in the second generation exactly when the number of directions m is even and the index difference has the parity of m/2, so the drawing contains closed regular polygons and star polygons. Propositions 2 and 3 of version 1.0.1 are now Propositions 3 and 4; the definitions and their statements are unchanged.
+- Report: the abstract mentions the tangent circles; Figure 1 is printed slightly smaller so that the first page keeps its length.
+- `tests/test_geometry.py`: a 13th test checks the nearest points and endpoint positions for 72 and 10 directions, the 19 tangent radii of the original, which chords lie in the second generation for 3 to 12 directions, and the chord coverage of the original.
 - `docs/SPEZIFIKATION.md`: two formulas write the less-than sign as `\lt`. GitHub took `<r` for the start of an HTML tag and failed to render the case distinction for the outer radius. The mathematics is unchanged.
 
 ## 1.0.1 — 2026-09-30
